@@ -1,0 +1,32 @@
+{% extends "base_dashboard.html" %}
+
+{% block title %}Eliminar Tarea{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+  <h1>🗑️ Eliminar Tarea</h1>
+  <a href="{% url 'dashboard:tareas_lista' %}" class="btn btn-ghost">← Volver</a>
+</div>
+
+<div class="card" style="max-width:480px;">
+  <p style="margin-bottom:20px;">
+    ¿Estás seguro de que deseas eliminar la tarea
+    <strong>"{{ tarea.titulo }}"</strong>?
+    Esta acción no se puede deshacer.
+  </p>
+
+  <div class="alert alert-error" style="margin-bottom:20px;">
+    ⚠️ Esta tarea será eliminada permanentemente.
+  </div>
+
+  <form method="post">
+    {% csrf_token %}
+    <div class="flex gap-2">
+      <button type="submit" class="btn btn-danger">🗑️ Sí, eliminar</button>
+      <a href="{% url 'dashboard:tareas_lista' %}" class="btn btn-ghost">Cancelar</a>
+    </div>
+  </form>
+</div>
+
+{% endblock %}

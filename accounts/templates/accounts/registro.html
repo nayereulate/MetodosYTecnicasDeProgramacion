@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block title %}Crear Cuenta{% endblock %}
+
+{% block body %}
+<div class="auth-wrapper">
+  <div class="auth-card" style="max-width:520px;">
+
+    <h1>Crear cuenta 🚀</h1>
+    <p class="subtitle">Completa el formulario para registrarte</p>
+
+    {% if messages %}
+      {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}" style="margin-bottom:16px;">{{ message }}</div>
+      {% endfor %}
+    {% endif %}
+
+    <form method="post" novalidate>
+      {% csrf_token %}
+
+      <!-- Nombre y Apellido en fila -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div class="form-group">
+          <label>{{ form.first_name.label }}</label>
+          {{ form.first_name }}
+          {% if form.first_name.errors %}<div class="field-errors">{{ form.first_name.errors.0 }}</div>{% endif %}
+        </div>
+        <div class="form-group">
+          <label>{{ form.last_name.label }}</label>
+          {{ form.last_name }}
+          {% if form.last_name.errors %}<div class="field-errors">{{ form.last_name.errors.0 }}</div>{% endif %}
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>{{ form.username.label }}</label>
+        {{ form.username }}
+        {% if form.username.errors %}<div class="field-errors">{{ form.username.errors.0 }}</div>{% endif %}
+      </div>
+
+      <div class="form-group">
+        <label>{{ form.email.label }}</label>
+        {{ form.email }}
+        {% if form.email.errors %}<div class="field-errors">{{ form.email.errors.0 }}</div>{% endif %}
+      </div>
+
+      <div class="form-group">
+        <label>{{ form.password1.label }}</label>
+        {{ form.password1 }}
+        {% if form.password1.errors %}<div class="field-errors">{{ form.password1.errors.0 }}</div>{% endif %}
+        <small class="text-muted text-sm">Mínimo 8 caracteres, una mayúscula, un número y un símbolo especial.</small>
+      </div>
+
+      <div class="form-group">
+        <label>{{ form.password2.label }}</label>
+        {{ form.password2 }}
+        {% if form.password2.errors %}<div class="field-errors">{{ form.password2.errors.0 }}</div>{% endif %}
+      </div>
+
+      <div class="checkbox-group" style="margin-bottom:20px;">
+        {{ form.terminos }}
+        <label>{{ form.terminos.label }}</label>
+      </div>
+      {% if form.terminos.errors %}
+        <div class="field-errors" style="margin-bottom:12px;">{{ form.terminos.errors.0 }}</div>
+      {% endif %}
+
+      <button type="submit" class="btn btn-primary btn-full">
+        Crear cuenta →
+      </button>
+    </form>
+
+    <p class="text-muted text-sm mt-2" style="text-align:center;">
+      ¿Ya tienes cuenta?
+      <a href="{% url 'accounts:login' %}" style="color:var(--accent);">Inicia sesión</a>
+    </p>
+
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,105 @@
+{% extends "base_dashboard.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+  <h1>📊 Dashboard</h1>
+  <span class="text-muted text-sm">Hola, {{ request.user.nombre_completo }} 👋</span>
+</div>
+
+<!-- Stats -->
+<div class="stats-grid">
+  <div class="stat-card">
+    <div class="stat-num">{{ stats.total }}</div>
+    <div class="stat-label">Total tareas</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-num" style="color:var(--yellow);">{{ stats.pendientes }}</div>
+    <div class="stat-label">Pendientes</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-num" style="color:var(--accent);">{{ stats.en_progreso }}</div>
+    <div class="stat-label">En progreso</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-num" style="color:var(--green);">{{ stats.completadas }}</div>
+    <div class="stat-label">Completadas</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-num" style="color:var(--red);">{{ stats.alta_prioridad }}</div>
+    <div class="stat-label">Alta prioridad</div>
+  </div>
+</div>
+
+<!-- Últimas tareas -->
+<div class="card">
+  <div class="card-header">
+    <h2>Últimas tareas</h2>
+    <a href="{% url 'dashboard:tarea_crear' %}" class="btn btn-primary btn-sm">+ Nueva tarea</a>
+  </div>
+
+  {% if ultimas_tareas %}
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Tarea</th>
+            <th>Prioridad</th>
+            <th>Estado</th>
+            <th>Fecha límite</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for tarea in ultimas_tareas %}
+          <tr>
+            <td class="{% if tarea.esta_completada %}strikethrough{% endif %}">{{ tarea.titulo }}</td>
+            <td>
+              {% if tarea.prioridad == 'alta' %}
+                <span class="badge badge-red">🔴 Alta</span>
+              {% elif tarea.prioridad == 'media' %}
+                <span class="badge badge-yellow">🟡 Media</span>
+              {% else %}
+                <span class="badge badge-green">🟢 Baja</span>
+              {% endif %}
+            </td>
+            <td>
+              {% if tarea.estado == 'completada' %}
+                <span class="badge badge-green">Completada</span>
+              {% elif tarea.estado == 'en_progreso' %}
+                <span class="badge badge-blue">En progreso</span>
+              {% else %}
+                <span class="badge badge-gray">Pendiente</span>
+              {% endif %}
+            </td>
+            <td class="text-muted text-sm">
+              {% if tarea.fecha_limite %}{{ tarea.fecha_limite|date:"d/m/Y" }}{% else %}—{% endif %}
+            </td>
+            <td>
+              <div class="flex gap-2">
+                <a href="{% url 'dashboard:tarea_editar' tarea.pk %}" class="btn btn-ghost btn-sm">✏️</a>
+                <form method="post" action="{% url 'dashboard:tarea_completar' tarea.pk %}">
+                  {% csrf_token %}
+                  <button type="submit" class="btn btn-ghost btn-sm" title="Marcar completada">✅</button>
+                </form>
+              </div>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <div style="margin-top:12px;">
+      <a href="{% url 'dashboard:tareas_lista' %}" class="btn btn-ghost btn-sm">Ver todas las tareas →</a>
+    </div>
+  {% else %}
+    <p class="text-muted" style="text-align:center;padding:32px 0;">
+      No tienes tareas aún.
+      <a href="{% url 'dashboard:tarea_crear' %}" style="color:var(--accent);">Crea tu primera tarea</a>
+    </p>
+  {% endif %}
+</div>
+
+{% endblock %}

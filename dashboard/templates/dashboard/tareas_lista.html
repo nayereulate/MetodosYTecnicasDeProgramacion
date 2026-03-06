@@ -1,0 +1,104 @@
+{% extends "base_dashboard.html" %}
+
+{% block title %}Tareas{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+  <h1>✅ Tareas</h1>
+  <a href="{% url 'dashboard:tarea_crear' %}" class="btn btn-primary">+ Nueva tarea</a>
+</div>
+
+<!-- Filtros -->
+<form method="get" class="filters">
+  <input type="text" name="q" value="{{ query }}" placeholder="🔍 Buscar tarea...">
+  <select name="estado">
+    <option value="">Todos los estados</option>
+    <option value="pendiente"   {% if estado == 'pendiente' %}selected{% endif %}>Pendiente</option>
+    <option value="en_progreso" {% if estado == 'en_progreso' %}selected{% endif %}>En progreso</option>
+    <option value="completada"  {% if estado == 'completada' %}selected{% endif %}>Completada</option>
+  </select>
+  <select name="prioridad">
+    <option value="">Todas las prioridades</option>
+    <option value="alta"  {% if prioridad == 'alta' %}selected{% endif %}>🔴 Alta</option>
+    <option value="media" {% if prioridad == 'media' %}selected{% endif %}>🟡 Media</option>
+    <option value="baja"  {% if prioridad == 'baja' %}selected{% endif %}>🟢 Baja</option>
+  </select>
+  <button type="submit" class="btn btn-ghost btn-sm">Filtrar</button>
+  {% if query or estado or prioridad %}
+    <a href="{% url 'dashboard:tareas_lista' %}" class="btn btn-ghost btn-sm">✕ Limpiar</a>
+  {% endif %}
+</form>
+
+<div class="card">
+  {% if tareas %}
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Título</th>
+            <th>Prioridad</th>
+            <th>Estado</th>
+            <th>Fecha límite</th>
+            <th>Creada</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for tarea in tareas %}
+          <tr>
+            <td>
+              <div class="{% if tarea.esta_completada %}strikethrough{% endif %}">
+                <strong>{{ tarea.titulo }}</strong>
+                {% if tarea.descripcion %}
+                  <div class="text-muted text-sm">{{ tarea.descripcion|truncatechars:60 }}</div>
+                {% endif %}
+              </div>
+            </td>
+            <td>
+              {% if tarea.prioridad == 'alta' %}
+                <span class="badge badge-red">🔴 Alta</span>
+              {% elif tarea.prioridad == 'media' %}
+                <span class="badge badge-yellow">🟡 Media</span>
+              {% else %}
+                <span class="badge badge-green">🟢 Baja</span>
+              {% endif %}
+            </td>
+            <td>
+              {% if tarea.estado == 'completada' %}
+                <span class="badge badge-green">✓ Completada</span>
+              {% elif tarea.estado == 'en_progreso' %}
+                <span class="badge badge-blue">⚡ En progreso</span>
+              {% else %}
+                <span class="badge badge-gray">⏳ Pendiente</span>
+              {% endif %}
+            </td>
+            <td class="text-muted text-sm">
+              {% if tarea.fecha_limite %}{{ tarea.fecha_limite|date:"d/m/Y" }}{% else %}—{% endif %}
+            </td>
+            <td class="text-muted text-sm">{{ tarea.created_at|date:"d/m/Y" }}</td>
+            <td>
+              <div class="flex gap-2">
+                <a href="{% url 'dashboard:tarea_editar' tarea.pk %}" class="btn btn-ghost btn-sm" title="Editar">✏️</a>
+                <form method="post" action="{% url 'dashboard:tarea_completar' tarea.pk %}">
+                  {% csrf_token %}
+                  <button type="submit" class="btn btn-ghost btn-sm" title="Completar">✅</button>
+                </form>
+                <a href="{% url 'dashboard:tarea_eliminar' tarea.pk %}" class="btn btn-ghost btn-sm" title="Eliminar"
+                   style="color:var(--red);">🗑️</a>
+              </div>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <p class="text-muted" style="text-align:center;padding:40px 0;">
+      No hay tareas que mostrar.
+      <a href="{% url 'dashboard:tarea_crear' %}" style="color:var(--accent);">Crear una nueva</a>
+    </p>
+  {% endif %}
+</div>
+
+{% endblock %}

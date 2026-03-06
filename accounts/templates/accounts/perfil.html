@@ -1,0 +1,84 @@
+{% extends "base_dashboard.html" %}
+
+{% block title %}Mi Perfil{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <h1>👤 Mi Perfil</h1>
+</div>
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;max-width:800px;">
+
+  <!-- Datos personales -->
+  <div class="card" style="grid-column:1/-1;">
+    <div class="card-header">
+      <h2>Información personal</h2>
+    </div>
+    <form method="post" enctype="multipart/form-data" novalidate>
+      {% csrf_token %}
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div class="form-group">
+          <label>{{ form.first_name.label }}</label>
+          {{ form.first_name }}
+          {% if form.first_name.errors %}<div class="field-errors">{{ form.first_name.errors.0 }}</div>{% endif %}
+        </div>
+        <div class="form-group">
+          <label>{{ form.last_name.label }}</label>
+          {{ form.last_name }}
+          {% if form.last_name.errors %}<div class="field-errors">{{ form.last_name.errors.0 }}</div>{% endif %}
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>{{ form.username.label }}</label>
+        {{ form.username }}
+        {% if form.username.errors %}<div class="field-errors">{{ form.username.errors.0 }}</div>{% endif %}
+      </div>
+
+      <div class="form-group">
+        <label>{{ form.bio.label }}</label>
+        {{ form.bio }}
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div class="form-group">
+          <label>{{ form.fecha_nacimiento.label }}</label>
+          {{ form.fecha_nacimiento }}
+        </div>
+        <div class="form-group">
+          <label>{{ form.avatar.label }}</label>
+          {{ form.avatar }}
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-primary">
+        💾 Guardar cambios
+      </button>
+      <a href="{% url 'accounts:cambiar_contrasena' %}" class="btn btn-ghost" style="margin-left:8px;">
+        🔒 Cambiar contraseña
+      </a>
+    </form>
+  </div>
+
+  <!-- Info de cuenta (solo lectura) -->
+  <div class="card">
+    <h2 style="margin-bottom:16px;">Cuenta</h2>
+    <table>
+      <tr><td class="text-muted text-sm">Email</td><td>{{ request.user.email }}</td></tr>
+      <tr><td class="text-muted text-sm">Miembro desde</td><td>{{ request.user.created_at|date:"d/m/Y" }}</td></tr>
+      <tr><td class="text-muted text-sm">Último acceso</td><td>{{ request.user.last_login|date:"d/m/Y H:i" }}</td></tr>
+      <tr><td class="text-muted text-sm">Verificado</td>
+          <td>
+            {% if request.user.is_verified %}
+              <span class="badge badge-green">✓ Sí</span>
+            {% else %}
+              <span class="badge badge-gray">Pendiente</span>
+            {% endif %}
+          </td>
+      </tr>
+    </table>
+  </div>
+
+</div>
+{% endblock %}

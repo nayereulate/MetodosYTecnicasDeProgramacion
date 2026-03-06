@@ -1,0 +1,43 @@
+{% extends "base_dashboard.html" %}
+
+{% block title %}Cambiar Contraseña{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <h1>🔒 Cambiar Contraseña</h1>
+  <a href="{% url 'accounts:perfil' %}" class="btn btn-ghost">← Volver al perfil</a>
+</div>
+
+<div class="card" style="max-width:480px;">
+  <form method="post" novalidate>
+    {% csrf_token %}
+
+    <div class="form-group">
+      <label>{{ form.old_password.label }}</label>
+      {{ form.old_password }}
+      {% if form.old_password.errors %}<div class="field-errors">{{ form.old_password.errors.0 }}</div>{% endif %}
+    </div>
+
+    <div class="form-group">
+      <label>{{ form.new_password1.label }}</label>
+      {{ form.new_password1 }}
+      {% if form.new_password1.errors %}<div class="field-errors">{{ form.new_password1.errors.0 }}</div>{% endif %}
+      <small class="text-muted text-sm">Mínimo 8 caracteres, una mayúscula, un número y un símbolo.</small>
+    </div>
+
+    <div class="form-group">
+      <label>{{ form.new_password2.label }}</label>
+      {{ form.new_password2 }}
+      {% if form.new_password2.errors %}<div class="field-errors">{{ form.new_password2.errors.0 }}</div>{% endif %}
+    </div>
+
+    {% if form.non_field_errors %}
+      <div class="alert alert-error" style="margin-bottom:16px;">{{ form.non_field_errors.0 }}</div>
+    {% endif %}
+
+    <button type="submit" class="btn btn-primary">
+      🔒 Cambiar contraseña
+    </button>
+  </form>
+</div>
+{% endblock %}

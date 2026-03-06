@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block body %}
+<div class="layout">
+
+  <!-- ── Sidebar ── -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">⚡ Mi App</div>
+
+    <a href="{% url 'dashboard:inicio' %}"
+       class="{% if request.resolver_match.url_name == 'inicio' %}active{% endif %}">
+      📊 Dashboard
+    </a>
+
+    <a href="{% url 'dashboard:tareas_lista' %}"
+       class="{% if 'tarea' in request.resolver_match.url_name %}active{% endif %}">
+      ✅ Tareas
+    </a>
+
+    <a href="{% url 'accounts:perfil' %}"
+       class="{% if request.resolver_match.url_name == 'perfil' %}active{% endif %}">
+      👤 Mi Perfil
+    </a>
+
+    <a href="{% url 'accounts:cambiar_contrasena' %}"
+       class="{% if request.resolver_match.url_name == 'cambiar_contrasena' %}active{% endif %}">
+      🔒 Contraseña
+    </a>
+
+    <div class="sidebar-footer">
+      <!-- Info del usuario -->
+      <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;margin-bottom:8px;">
+        <div class="avatar">{{ request.user.iniciales }}</div>
+        <div>
+          <div style="font-size:0.85rem;font-weight:600;">{{ request.user.nombre_completo }}</div>
+          <div style="font-size:0.75rem;color:var(--text-muted);">{{ request.user.email }}</div>
+        </div>
+      </div>
+      <form method="post" action="{% url 'accounts:logout' %}">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-ghost btn-full btn-sm">
+          🚪 Cerrar sesión
+        </button>
+      </form>
+    </div>
+  </aside>
+
+  <!-- ── Contenido Principal ── -->
+  <main class="main-content">
+
+    <!-- Mensajes de Django -->
+    {% if messages %}
+      <div class="messages">
+        {% for message in messages %}
+          <div class="alert alert-{{ message.tags }}">
+            {% if message.tags == 'success' %}✅{% elif message.tags == 'error' %}❌{% elif message.tags == 'warning' %}⚠️{% else %}ℹ️{% endif %}
+            {{ message }}
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    {% block content %}{% endblock %}
+  </main>
+
+</div>
+{% endblock %}
