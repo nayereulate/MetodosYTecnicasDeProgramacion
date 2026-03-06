@@ -1,4 +1,4 @@
-# MetodosYTecnicasDeProgramacio# 🚀 Métodos y Técnicas de Programación: Python & Django
+# 🚀 Métodos y Técnicas de Programación: Python & Django
 
 [![Python Version](https://img.shields.io/badge/python-3.x-blue.svg)](https://www.python.org/)
 [![Django Version](https://img.shields.io/badge/django-4.x-green.svg)](https://www.djangoproject.com/)
