@@ -3,8 +3,9 @@
 [![Python Version](https://img.shields.io/badge/python-3.x-blue.svg)](https://www.python.org/)
 [![Django Version](https://img.shields.io/badge/django-4.x-green.svg)](https://www.djangoproject.com/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Regex](https://img.shields.io/badge/regex-supported-orange.svg)](#-expresiones-regulares-regex)
 
-[cite_start]Este repositorio contiene la documentación y bases técnicas sobre el desarrollo con el lenguaje **Python**, el framework **Django** y el uso avanzado de **Expresiones Regulares**[cite: 266, 311, 455].
+> Documentación técnica de desarrollo web moderno: fundamentos de Python, framework Django y Expresiones Regulares.
 
 ---
 
@@ -18,76 +19,145 @@
 ---
 
 ## 🐍 Introducción a Python
-[cite_start]Python es un lenguaje creado en los 90 por **Guido van Rossum**[cite: 458]. [cite_start]Es reconocido por ser uno de los lenguajes más usados y su nombre está inspirado en *Monty Python*[cite: 461, 462].
 
-### Conceptos Clave:
-* **Funciones:** Se definen con la palabra reservada `def`.
-* **Control de Flujo:** Uso de sentencias `if-elif-else`, ciclos `while` y `for` utilizando listas.
-* [cite_start]**Entrada/Salida:** Captura de datos con `input()` y muestra de resultados con `print()`[cite: 445].
+Python es un lenguaje de programación creado en los años 90 por **Guido van Rossum**. Su nombre está inspirado en el grupo cómico británico *Monty Python*. Hoy es uno de los lenguajes más populares del mundo por su claridad y versatilidad.
+
+### Conceptos Clave
+
+| Concepto | Descripción |
+|---|---|
+| **Funciones** | Se definen con la palabra reservada `def` |
+| **Control de Flujo** | Sentencias `if-elif-else`, ciclos `while` y `for` |
+| **Entrada / Salida** | Captura con `input()`, visualización con `print()` |
+```python
+# Ejemplo básico de función en Python
+def saludar(nombre):
+    print(f"Hola, {nombre}! Bienvenido a Python.")
+
+nombre = input("Ingresa tu nombre: ")
+saludar(nombre)
+```
 
 ---
 
 ## 💻 Entorno de Desarrollo
-[cite_start]Para garantizar un desarrollo limpio, utilizamos **entornos virtuales (venv)**[cite: 405].
 
-* [cite_start]**¿Qué es?:** Un espacio aislado para instalar distintas versiones de paquetes sin interferir con el sistema[cite: 406, 418].
-* [cite_start]**Comandos básicos (Windows)[cite: 428, 431]:**
-  - Crear: `python -m venv nombre_entorno`
-  - Activar: `nombre_entorno\Scripts\activate`
-  - Desactivar: `deactivate`
+Para un desarrollo limpio y reproducible se utilizan **entornos virtuales (`venv`)**: espacios aislados que permiten instalar distintas versiones de paquetes sin interferir con el sistema global.
+
+> 💡 **¿Por qué usarlo?** Evita conflictos de versiones entre proyectos. Cada proyecto tiene su propio entorno limpio y aislado.
+```bash
+# 1. Crear el entorno virtual
+python -m venv nombre_entorno
+
+# 2. Activar el entorno (Windows)
+nombre_entorno\Scripts\activate
+
+# 3. Desactivar cuando termines
+deactivate
+```
 
 ---
 
 ## 🎸 Framework Django
-[cite_start]Django es un framework web de alto nivel que permite un desarrollo rápido, seguro y mantenible[cite: 389].
 
-### [cite_start]Arquitectura MVT (Model-View-Template)[cite: 328]:
-* [cite_start]**Modelos (Models):** Definen la estructura de los datos y gestionan la base de datos (ORM)[cite: 337, 359].
-* [cite_start]**Vistas (Views):** Gestionan las peticiones HTTP y devuelven respuestas[cite: 356].
-* [cite_start]**Plantillas (Templates):** Ficheros de texto que definen la estructura visual (HTML)[cite: 360].
+Django es un framework web de alto nivel escrito en Python que permite el desarrollo **rápido, seguro y mantenible** de aplicaciones web. Sigue el principio **DRY** *(Don't Repeat Yourself)* y una arquitectura **MVT**.
 
+### Arquitectura MVT
+```
+┌─────────────┐     ┌─────────────┐     ┌─────────────┐
+│    MODEL    │ ──► │    VIEW     │ ──► │  TEMPLATE   │
+│  Datos/ORM  │     │ Lógica HTTP │     │ HTML Visual │
+└─────────────┘     └─────────────┘     └─────────────┘
+```
 
-### [cite_start]Estructura de Proyecto Inicial[cite: 364]:
-Al ejecutar `django-admin startproject mysite`, se crea:
-* [cite_start]`manage.py`: Utilidad para interactuar con el proyecto[cite: 366].
-* [cite_start]`settings.py`: Configuración global[cite: 369].
-* [cite_start]`urls.py`: Mapeador de rutas de entrada[cite: 355, 370].
+| Capa | Responsabilidad |
+|---|---|
+| **Models** | Definen la estructura de datos y gestionan la BD vía ORM |
+| **Views** | Gestionan peticiones HTTP y devuelven respuestas |
+| **Templates** | Ficheros HTML que definen la estructura visual |
+
+### Estructura del Proyecto
+
+Al ejecutar `django-admin startproject mysite`:
+```
+mysite/
+├── manage.py         # Utilidad CLI del proyecto
+└── mysite/
+    ├── settings.py   # Configuración global
+    ├── urls.py       # Mapeador de rutas URL
+    ├── wsgi.py       # Punto de entrada WSGI
+    └── asgi.py       # Punto de entrada ASGI (async)
+```
 
 ---
 
 ## 🔍 Expresiones Regulares (Regex)
-[cite_start]Definen un patrón de búsqueda para cadenas de caracteres[cite: 269].
 
-### Símbolos Comunes:
-* `.` : Cualquier carácter.
-* `^` : Inicio de una cadena.
-* `$` : Final de una cadena.
-* `\d` : Dígito (equivalente a `[0-9]`).
-* `+` : 1 o más repeticiones.
+Las expresiones regulares definen un **patrón de búsqueda** para cadenas de caracteres. Son fundamentales para validar, buscar y transformar texto.
 
-> [cite_start]**Ejemplo en Python [cite: 291][cite_start]:** > Para usar Regex en Python, importa el paquete `re` y utiliza `re.search(patrón, texto)`[cite: 294].
+### Símbolos Comunes
+
+| Símbolo | Descripción | Ejemplo |
+|---|---|---|
+| `.` | Cualquier carácter | `a.c` → "abc", "axc" |
+| `^` | Inicio de cadena | `^Hola` → "Hola mundo" |
+| `$` | Final de cadena | `mundo$` → "Hola mundo" |
+| `\d` | Dígito `[0-9]` | `\d+` → "42", "2026" |
+| `\w` | Alfanumérico o `_` | `\w+` → "python_3" |
+| `+` | 1 o más repeticiones | `a+` → "a", "aaa" |
+| `*` | 0 o más repeticiones | `ab*` → "a", "ab" |
+| `?` | 0 o 1 (opcional) | `colou?r` → "color" |
+| `[ ]` | Clase de caracteres | `[aeiou]` → vocales |
+```python
+import re
+
+# Buscar un patrón en un texto
+texto = "Mi email es nayer@dev.com"
+patron = r"[\w.-]+@[\w.-]+\.\w+"
+
+resultado = re.search(patron, texto)
+if resultado:
+    print(f"Email encontrado: {resultado.group()}")
+```
 
 ---
 
 ## 🛠️ Instalación
-[cite_start]Sigue estos pasos para configurar tu ambiente de trabajo según los materiales de la materia[cite: 435]:
 
-1. [cite_start]**Instalar Python:** Verifica con `python --version`[cite: 436].
-2. [cite_start]**Instalar PIP:** Gestor de paquetes de Python[cite: 437].
-3. [cite_start]**Entorno Virtual:** Crea y activa tu `venv`[cite: 442].
-4. **Instalar Django:** ```bash
-   pip install django
-   [cite_start]
-http://googleusercontent.com/immersive_entry_chip/0
-http://googleusercontent.com/immersive_entry_chip/1
+Sigue estos pasos para configurar tu entorno de trabajo desde cero.
+
+**1. Instalar Python**
+Descarga desde [python.org](https://www.python.org/) y verifica:
+```bash
+python --version
+```
+
+**2. Verificar PIP**
+```bash
+pip --version
+```
+
+**3. Crear y activar entorno virtual**
+```bash
+python -m venv venv
+venv\Scripts\activate     # Windows
+source venv/bin/activate  # macOS/Linux
+```
+
+**4. Instalar Django**
+```bash
+pip install django
+django-admin --version
+```
+
+**5. Crear y correr el proyecto**
+```bash
+django-admin startproject mysite .
+python manage.py runserver
+```
 
 ---
 
-### ¿Por qué este README es profesional?
-1.  **Badges:** He incluido medallas visuales al inicio para indicar la versión de Python y Django.
-2.  [cite_start]**Estructura:** Está dividido en secciones lógicas que cubren desde lo básico (Python) hasta lo avanzado (Django/Regex)[cite: 266, 311, 455].
-3.  [cite_start]**Fragmentos de código:** El uso de bloques de código facilita la lectura de los comandos de instalación mencionados en tus archivos[cite: 363, 426].
-4.  **Citas:** He referenciado los puntos clave de tus PDFs para que sea académicamente sólido.
-5.  **Personalización:** He añadido tu marca personal (Nayer | Dev) en los créditos.
+## 👤 Autor
 
-Espero que este README te ayude a destacar en tu materia. ¡Mucho éxito con tu canal de TikTok también!
+**Nayer | Dev** — MIT License © 2025
